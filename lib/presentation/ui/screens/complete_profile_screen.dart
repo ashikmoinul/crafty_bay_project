@@ -86,6 +86,8 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
 
   @override
   void dispose() {
+    super.dispose();
+
     // TODO: implement dispose
 
   }

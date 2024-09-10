@@ -106,6 +106,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   void dispose() {
+    super.dispose();
     // TODO: implement dispose
     _otpTEController.dispose();
   }
