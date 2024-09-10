@@ -1,9 +1,5 @@
-import 'package:crafty_bay_project/presentation/ui/screens/otp_verification_screen.dart';
-import 'package:crafty_bay_project/presentation/ui/utils/app_colors.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/app_logo_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class CompleteProfileScreen extends StatefulWidget {
   const CompleteProfileScreen({super.key});
