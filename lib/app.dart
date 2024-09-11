@@ -30,6 +30,9 @@ class _CraftyBayAppState extends State<CraftyBayApp> {
               enabledBorder: _outlineInputBorder(),
               focusedBorder: _outlineInputBorder(),
               errorBorder: _outlineInputBorder(Colors.red),
+              hintStyle: TextStyle(
+                fontWeight: FontWeight.w400,
+              ),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
           elevatedButtonTheme: ElevatedButtonThemeData(
