@@ -1,4 +1,3 @@
-import 'package:crafty_bay_project/presentation/ui/screens/email_verification_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/home_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/app_logo_widget.dart';
 import 'package:flutter/material.dart';
