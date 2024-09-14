@@ -1,3 +1,4 @@
+import 'package:crafty_bay_project/presentation/state_holders/bottom_nav_bar_controller.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/category_list_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/assets_path.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/home/horizontal_category_list_view.dart';
@@ -7,7 +8,6 @@ import 'package:crafty_bay_project/presentation/ui/widgets/home/section_header.d
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import '../widgets/home/app_bar_icon_button.dart';
 import '../widgets/home_banner_slider.dart';
 
@@ -85,7 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         SectionHeader(
           title: 'Special',
-          onTap: () {},
+          onTap: () {
+            Get.find<BottomNavBarController>().selectCategory();
+          },
         ),
         SizedBox(
             height: 200,

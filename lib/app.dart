@@ -1,3 +1,4 @@
+import 'package:crafty_bay_project/controller_binder.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/splash_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class _CraftyBayAppState extends State<CraftyBayApp> {
     return GetMaterialApp(
       //use getX
       home: const SplashScreen(),
+      initialBinding: ControllerBinder(),
       theme: ThemeData(
         colorSchemeSeed: AppColors.themeColor,
         scaffoldBackgroundColor: Colors.white,
