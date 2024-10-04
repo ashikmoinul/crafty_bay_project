@@ -36,7 +36,7 @@ class NetworkCaller {
         );
       }
     } catch (e) {
-      _responseLog(url, -1, null, {}, true, e);
+      _responseLog(url, -1, null, {}, false, e);
       return NetworkResponse(
         isSuccess: false,
         statusCode: -1,
@@ -74,7 +74,7 @@ class NetworkCaller {
         );
       }
     } catch (e) {
-      _responseLog(url, -1, null, {}, true, e);
+      _responseLog(url, -1, null, {}, false, e);
       return NetworkResponse(
         isSuccess: false,
         statusCode: -1,
@@ -111,7 +111,8 @@ class NetworkCaller {
     ''';
     if (isSuccess) {
       logger.i(message);
-    } else
+    } else {
       logger.e(message);
+    }
   }
 }
