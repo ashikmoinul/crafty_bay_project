@@ -89,7 +89,7 @@ class _HomeBannerSliderState extends State<HomeBannerSlider> {
                                   foregroundColor: AppColors.themeColor,
                                 ),
                                 onPressed: () {},
-                                child: const Text('Buy now')),
+                                child: const Text('Buy now'),),
                           ),
                         ],
                       ),

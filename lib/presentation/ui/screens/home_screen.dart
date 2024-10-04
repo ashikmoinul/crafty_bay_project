@@ -1,7 +1,8 @@
 import 'package:crafty_bay_project/presentation/state_holders/bottom_nav_bar_controller.dart';
-import 'package:crafty_bay_project/presentation/state_holders/slider_list_controller.dart';
+import 'package:crafty_bay_project/presentation/state_holders/category_list_controller.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/category_list_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/assets_path.dart';
+import 'package:crafty_bay_project/presentation/ui/widgets/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/home/horizontal_category_list_view.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/home/horizontal_product_list_view.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/home/search_text_field.dart';
@@ -20,43 +21,49 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-  @override
-  void initState() {
-    super.initState();
-    Get.find<SliderListController>().getSliderList();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                const SizedBox(height: 16,),
-                SearchTextField(textEditingController: TextEditingController(),),
-                const SizedBox(height: 16,),
-                const HomeBannerSlider(),
-                const SizedBox(height: 16,),
-                _buildCategoriesSection(),
-                const SizedBox(height: 16,),
-                _buildPopularProductsSection(),
-                const SizedBox(height: 16,),
-                _buildNewProductsSection(),
-                const SizedBox(height: 16,),
-                _buildSpecialProductsSection(),
-
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 16,
+              ),
+              SearchTextField(
+                textEditingController: TextEditingController(),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const HomeBannerSlider(),
+              const SizedBox(
+                height: 16,
+              ),
+              _buildCategoriesSection(),
+              const SizedBox(
+                height: 16,
+              ),
+              _buildPopularProductsSection(),
+              const SizedBox(
+                height: 16,
+              ),
+              _buildNewProductsSection(),
+              const SizedBox(
+                height: 16,
+              ),
+              _buildSpecialProductsSection(),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 
-  Widget _buildPopularProductsSection(){
+  Widget _buildPopularProductsSection() {
     return Column(
       children: [
         SectionHeader(
@@ -64,14 +71,14 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {},
         ),
         SizedBox(
-            height: 200,
-            child:  HorizontalProductListView(),
+          height: 200,
+          child: HorizontalProductListView(),
         ),
       ],
     );
   }
 
-  Widget _buildNewProductsSection(){
+  Widget _buildNewProductsSection() {
     return Column(
       children: [
         SectionHeader(
@@ -79,14 +86,14 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {},
         ),
         SizedBox(
-            height: 200,
-            child:  HorizontalProductListView(),
+          height: 200,
+          child: HorizontalProductListView(),
         ),
       ],
     );
   }
 
-  Widget _buildSpecialProductsSection(){
+  Widget _buildSpecialProductsSection() {
     return Column(
       children: [
         SectionHeader(
@@ -96,8 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         SizedBox(
-            height: 200,
-            child: HorizontalProductListView(),
+          height: 200,
+          child: HorizontalProductListView(),
         ),
       ],
     );
@@ -105,20 +112,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategoriesSection() {
     return Column(
-            children: [
-              SectionHeader(
-                title: 'Categories',
-                onTap: () {
-                  Get.to(() => const CategoryListScreen());
-                },
+      children: [
+        SectionHeader(
+          title: 'Categories',
+          onTap: () {
+            Get.to(() => const CategoryListScreen());
+          },
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        SizedBox(
+          height: 105,
+          child: GetBuilder<CategoryListController>(
+              builder: (categoryListController) {
+            return Visibility(
+              visible: !categoryListController.inProgress,
+              replacement: const CenteredCircularProgressIndicator(),
+              child: HorizontalCategoryListView(
+                categoryList: categoryListController.categoryList,
               ),
-              const SizedBox(height: 8,),
-              SizedBox(
-                height: 105,
-                child: HorizontalCategoryListView(),
-              ),
-            ],
-          );
+            );
+          }),
+        ),
+      ],
+    );
   }
 
   AppBar _buildAppBar() {
@@ -128,34 +146,23 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         AppBarIconButton(
           iconData: Icons.person,
-          onTap: () {  },
-
-        ),const SizedBox(width: 8,),
+          onTap: () {},
+        ),
+        const SizedBox(
+          width: 8,
+        ),
         AppBarIconButton(
           iconData: Icons.call,
-          onTap: () {  },
-
-        ),const SizedBox(width: 8,),
+          onTap: () {},
+        ),
+        const SizedBox(
+          width: 8,
+        ),
         AppBarIconButton(
           iconData: Icons.notifications_active,
-          onTap: () {  },
-
+          onTap: () {},
         )
       ],
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

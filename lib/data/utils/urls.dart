@@ -3,6 +3,7 @@ class Urls {
 
   static const String dummyUrl = '$_baseUrl/login';
   static const String sliderListUrl = '$_baseUrl/ListProductSlider';
+  static const String categoryListUrl = '$_baseUrl/CategoryList';
 
 
 }

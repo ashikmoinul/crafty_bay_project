@@ -2,16 +2,16 @@ import 'package:crafty_bay_project/data/models/slider_model.dart';
 
 class SliderListModel {
   String? msg;
-  List<SliderModel>? data;
+  List<CategoryModel>? sliderList;
 
-  SliderListModel({this.msg, this.data});
+  SliderListModel({this.msg, this.sliderList});
 
   SliderListModel.fromJson(Map<String, dynamic> json) {
     msg = json['msg'];
     if (json['data'] != null) {
-      data = <SliderModel>[];
+      sliderList = <CategoryModel>[];
       json['data'].forEach((v) {
-        data!.add(new SliderModel.fromJson(v));
+        sliderList!.add(CategoryModel.fromJson(v));
       });
     }
   }
