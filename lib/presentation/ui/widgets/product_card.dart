@@ -1,3 +1,4 @@
+import 'package:crafty_bay_project/data/models/product_model.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/product_details_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/app_colors.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/assets_path.dart';
@@ -7,25 +8,27 @@ import 'package:get/get_core/src/get_main.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
-    super.key,
+    super.key, required this.product,
   });
+
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ProductDetailsScreen());
+        Get.to(() => ProductDetailsScreen(productId: product.id!,));
       },
       child: Card(
         color: Colors.white,
         elevation: 3,
         child: SizedBox(
-          width: 120,
+          width: 160,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 120,
+                width: 160,
                 height: 100,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -39,13 +42,13 @@ class ProductCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Padding(
+               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Product Name',
+                      product.title ?? '',
                       maxLines: 1,
                       style: TextStyle(
                           fontWeight: FontWeight.w500, color: Colors.black54),
@@ -54,7 +57,7 @@ class ProductCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '\$120',
+                          '\$${product.price}',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: AppColors.themeColor,
@@ -68,7 +71,7 @@ class ProductCard extends StatelessWidget {
                               color: Colors.amber,
                             ),
                             Text(
-                              '3',
+                              '${product.star}',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.themeColor,

@@ -1,70 +1,104 @@
+import 'package:crafty_bay_project/data/models/product_details_model.dart';
+import 'package:crafty_bay_project/data/models/product_model.dart';
+import 'package:crafty_bay_project/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/app_colors.dart';
+import 'package:crafty_bay_project/presentation/ui/widgets/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/color_picker.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/product_image_slider.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/size_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:item_count_number_button/item_count_number_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({super.key});
+  const ProductDetailsScreen({super.key, required this.productId});
+
+  final int productId;
+
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+
+  @override
+  void initState() {
+
+    super.initState();
+    Get.find<ProductDetailsController>().getProductDetails(widget.productId);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Product Details'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _buildProductDetails(),
-          ),
-          _buildPriceAndAddToCartSection(),
-        ],
+      body: GetBuilder<ProductDetailsController>(
+        builder: (productDetailsController) {
+
+          if(productDetailsController.inProgress){
+            return const CenteredCircularProgressIndicator();
+          }
+          if(productDetailsController.errorMessage != null){
+            return Center(
+              child: Text(productDetailsController.errorMessage!) ,
+            );
+          }
+
+          return Column(
+            children: [
+              Expanded(
+                child: _buildProductDetails(productDetailsController.product!),
+              ),
+              _buildPriceAndAddToCartSection(productDetailsController.product!),
+            ],
+          );
+        }
       ),
     );
   }
 
-  SingleChildScrollView _buildProductDetails() {
+  SingleChildScrollView _buildProductDetails(ProductDetailsModel product) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const ProductImageSlider(),
+          ProductImageSlider(
+            sliderUrls: [
+              product.img1!,
+              product.img2!,
+              product.img3!,
+              product.img4!,
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildNameAndQuantitySection(),
+                _buildNameAndQuantitySection(product),
                 const SizedBox(height: 4),
-                _buildRatingAndReviewSection(),
+                _buildRatingAndReviewSection(product),
                 const SizedBox(height: 4),
-                ColorPicker(
-                  colors: [
-                    Colors.red,
-                    Colors.green,
-                    Colors.yellow,
-                    Colors.black,
-                  ],
-                  onColorSelected: (color) {},
-                ),
+                // ColorPicker(
+                //   colors: [
+                //     Colors.red,
+                //     Colors.green,
+                //     Colors.yellow,
+                //     Colors.black,
+                //   ],
+                //   onColorSelected: (color) {},
+                // ),
                 const SizedBox(height: 16),
                 SizePicker(
-                  sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+                  sizes: product.color!.split(','),  //split for comma separated string because api shows in string by comma
                   onSizeSelected: (String selectedSize) {},
                 ),
                 const SizedBox(height: 16),
-                _buildDescriptionSection(),
-                const SizedBox(height: 8),
-                const Text(
-                  '''Item Count Number Button is a Flutter package that allows you to easily implement a customizable item count widget with increment and decrement buttons. This widget is particularly useful in scenarios where you need to manage the quantity of items, such as in a shopping cart or inventory management system''',
-                  style: TextStyle(color: Colors.black45),
-                ),
+                _buildDescriptionSection(product),
+
               ],
             ),
           ),
@@ -73,7 +107,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildDescriptionSection() {
+  Widget _buildDescriptionSection(ProductDetailsModel productDetails) {
 
     return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,17 +116,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     'Description',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
+                  const SizedBox(height: 8),
+                  Text(
+                    productDetails.product?.shortDes ?? '',
+                     style: const TextStyle(color: Colors.black45),
+                  ),
                 ],
               );
   }
 
-  Widget _buildNameAndQuantitySection() {
+  Widget _buildNameAndQuantitySection(ProductDetailsModel productDetails) {
     return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Text(
-                      'Nike Shoe 2024 Latest Model - New year special deal',
+                      productDetails.product?. title ?? '',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -108,27 +147,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               );
   }
 
-  Widget _buildRatingAndReviewSection() {
+  Widget _buildRatingAndReviewSection(ProductDetailsModel productDetails) {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.star,
               color: Colors.amber,
             ),
             Text(
-              '3',
-              style: TextStyle(
+              '${productDetails.product?.star ?? ''}',
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 color: AppColors.themeColor,
               ),
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           width: 4,
         ),
         TextButton(
@@ -141,7 +180,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ),
         ),
-        Card(
+        const Card(
           color: AppColors.themeColor,
           child: Padding(
             padding: EdgeInsets.all(2.0),
@@ -156,12 +195,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildPriceAndAddToCartSection() {
+  Widget _buildPriceAndAddToCartSection(ProductDetailsModel productDetails) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
           color: AppColors.themeColor.withOpacity(0.1),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(8),
             topRight: Radius.circular(8),
           )),
@@ -171,10 +210,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Price'),
+              const Text('Price'),
               Text(
-                '\$100',
-                style: TextStyle(
+                '\$${productDetails.product?.price}',
+                style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: AppColors.themeColor),
@@ -184,7 +223,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           SizedBox(
               width: 140,
               child:
-                  ElevatedButton(onPressed: () {}, child: Text('Add to Cart')))
+                  ElevatedButton(onPressed: () {}, child: const Text('Add to Cart')))
         ],
       ),
     );

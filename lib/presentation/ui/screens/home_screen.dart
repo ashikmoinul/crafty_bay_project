@@ -1,5 +1,7 @@
-import 'package:crafty_bay_project/presentation/state_holders/bottom_nav_bar_controller.dart';
 import 'package:crafty_bay_project/presentation/state_holders/category_list_controller.dart';
+import 'package:crafty_bay_project/presentation/state_holders/new_product_list_controller.dart';
+import 'package:crafty_bay_project/presentation/state_holders/popular_product_list_controller.dart';
+import 'package:crafty_bay_project/presentation/state_holders/special_product_list_controller.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/category_list_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/assets_path.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/centered_circular_progress_indicator.dart';
@@ -63,6 +65,51 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Widget _buildPopularProductsSection() {
+  //   return Column(
+  //     children: [
+  //       SectionHeader(
+  //         title: 'Popular',
+  //         onTap: () {},
+  //       ),
+  //       SizedBox(
+  //         height: 180,
+  //         child: GetBuilder<PopularProductListController>(
+  //             builder: (popularProductListController) {
+  //           return Visibility(
+  //               visible: !popularProductListController.inProgress,
+  //               replacement: const CenteredCircularProgressIndicator(),
+  //               child: HorizontalProductListView(
+  //                 productList: popularProductListController.productList,
+  //               ));
+  //         }),
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  // Widget _buildNewProductsSection() {
+  //   return Column(
+  //     children: [
+  //       SectionHeader(
+  //         title: 'New',
+  //         onTap: () {},
+  //       ),
+  //       SizedBox(
+  //         height: 180,
+  //         child: GetBuilder<NewProductListController>(
+  //             builder: (newProductListController) {
+  //               return Visibility(
+  //                   visible: !newProductListController.inProgress,
+  //                   replacement: const CenteredCircularProgressIndicator(),
+  //                   child: HorizontalProductListView(
+  //                     productList: newProductListController.productList,
+  //                   ));
+  //             }),
+  //       ),
+  //     ],
+  //   );
+  // }
   Widget _buildPopularProductsSection() {
     return Column(
       children: [
@@ -71,8 +118,18 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {},
         ),
         SizedBox(
-          height: 200,
-          child: HorizontalProductListView(),
+          height: 180,
+          child: GetBuilder<PopularProductListController>(
+              builder: (popularProductListController) {
+                return Visibility(
+                  visible: !popularProductListController.inProgress,
+                  replacement: const CenteredCircularProgressIndicator(),
+                  child: HorizontalProductListView(
+                    productList: popularProductListController.productList,
+                  ),
+                );
+              }
+          ),
         ),
       ],
     );
@@ -86,25 +143,67 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () {},
         ),
         SizedBox(
-          height: 200,
-          child: HorizontalProductListView(),
+          height: 180,
+          child: GetBuilder<NewProductListController>(
+              builder: (newProductListController) {
+                return Visibility(
+                  visible: !newProductListController.inProgress,
+                  replacement: const CenteredCircularProgressIndicator(),
+                  child: HorizontalProductListView(
+                    productList: newProductListController.productList,
+                  ),
+                );
+              }
+          ),
         ),
       ],
     );
   }
 
+  // Widget _buildSpecialProductsSection() {
+  //   return Column(
+  //     children: [
+  //       SectionHeader(
+  //         title: 'Special',
+  //         onTap: () {
+  //           Get.find<BottomNavBarController>().selectCategory();
+  //         },
+  //       ),
+  //       SizedBox(
+  //         height: 200,
+  //         child: GetBuilder<SpecialProductListController>(
+  //             builder: (specialProductListController) {
+  //               return Visibility(
+  //                   visible: !specialProductListController.inProgress,
+  //                   replacement: const CenteredCircularProgressIndicator(),
+  //                   child: HorizontalProductListView(
+  //                     productList: specialProductListController.productList,
+  //                   ));
+  //             }),
+  //       ),
+  //     ],
+  //   );
+  // }
   Widget _buildSpecialProductsSection() {
     return Column(
       children: [
         SectionHeader(
           title: 'Special',
-          onTap: () {
-            Get.find<BottomNavBarController>().selectCategory();
-          },
+          onTap: () {},
         ),
         SizedBox(
-          height: 200,
-          child: HorizontalProductListView(),
+          height: 180,
+          child: GetBuilder<SpecialProductListController>(
+              builder: (specialProductListController) {
+                return Visibility(
+                  visible: !specialProductListController.inProgress,
+                  replacement: const CenteredCircularProgressIndicator(),
+                  child: HorizontalProductListView(
+                    productList: specialProductListController.productList,
+                  ),
+                );
+              }
+          ),
         ),
       ],
     );
