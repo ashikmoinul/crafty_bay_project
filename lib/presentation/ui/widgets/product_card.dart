@@ -1,14 +1,13 @@
 import 'package:crafty_bay_project/data/models/product_model.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/product_details_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/app_colors.dart';
-import 'package:crafty_bay_project/presentation/ui/utils/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
-    super.key, required this.product,
+    super.key,
+    required this.product,
   });
 
   final ProductModel product;
@@ -17,7 +16,9 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => ProductDetailsScreen(productId: product.id!,));
+        Get.to(() => ProductDetailsScreen(
+              productId: product.id!,
+            ));
       },
       child: Card(
         color: Colors.white,
@@ -37,13 +38,14 @@ class ProductCard extends StatelessWidget {
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                   ),
-                  image: const DecorationImage(
-                    image: AssetImage(AssetsPath.dummyProductImage),
+                  image: DecorationImage(
+                    image: NetworkImage(product.image ?? ''),
+                    fit: BoxFit.scaleDown,
                   ),
                 ),
               ),
-               Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

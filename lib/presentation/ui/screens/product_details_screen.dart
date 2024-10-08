@@ -1,6 +1,8 @@
 import 'package:crafty_bay_project/data/models/product_details_model.dart';
 import 'package:crafty_bay_project/data/models/product_model.dart';
+import 'package:crafty_bay_project/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay_project/presentation/state_holders/product_details_controller.dart';
+import 'package:crafty_bay_project/presentation/ui/screens/email_verification_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/app_colors.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/color_picker.dart';
@@ -15,20 +17,16 @@ class ProductDetailsScreen extends StatefulWidget {
 
   final int productId;
 
-
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-
   @override
   void initState() {
-
     super.initState();
     Get.find<ProductDetailsController>().getProductDetails(widget.productId);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -37,27 +35,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         title: const Text('Product Details'),
       ),
       body: GetBuilder<ProductDetailsController>(
-        builder: (productDetailsController) {
-
-          if(productDetailsController.inProgress){
-            return const CenteredCircularProgressIndicator();
-          }
-          if(productDetailsController.errorMessage != null){
-            return Center(
-              child: Text(productDetailsController.errorMessage!) ,
-            );
-          }
-
-          return Column(
-            children: [
-              Expanded(
-                child: _buildProductDetails(productDetailsController.product!),
-              ),
-              _buildPriceAndAddToCartSection(productDetailsController.product!),
-            ],
+          builder: (productDetailsController) {
+        if (productDetailsController.inProgress) {
+          return const CenteredCircularProgressIndicator();
+        }
+        if (productDetailsController.errorMessage != null) {
+          return Center(
+            child: Text(productDetailsController.errorMessage!),
           );
         }
-      ),
+
+        return Column(
+          children: [
+            Expanded(
+              child: _buildProductDetails(productDetailsController.product!),
+            ),
+            _buildPriceAndAddToCartSection(productDetailsController.product!),
+          ],
+        );
+      }),
     );
   }
 
@@ -93,12 +89,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 // ),
                 const SizedBox(height: 16),
                 SizePicker(
-                  sizes: product.color!.split(','),  //split for comma separated string because api shows in string by comma
+                  sizes: product.color!.split(
+                      ','), //split for comma separated string because api shows in string by comma
                   onSizeSelected: (String selectedSize) {},
                 ),
                 const SizedBox(height: 16),
                 _buildDescriptionSection(product),
-
               ],
             ),
           ),
@@ -108,43 +104,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget _buildDescriptionSection(ProductDetailsModel productDetails) {
-
     return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Description',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    productDetails.product?.shortDes ?? '',
-                     style: const TextStyle(color: Colors.black45),
-                  ),
-                ],
-              );
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Description',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          productDetails.product?.shortDes ?? '',
+          style: const TextStyle(color: Colors.black45),
+        ),
+      ],
+    );
   }
 
   Widget _buildNameAndQuantitySection(ProductDetailsModel productDetails) {
     return Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      productDetails.product?. title ?? '',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  ItemCount(
-                    initialValue: 1,
-                    minValue: 1,
-                    maxValue: 10,
-                    decimalPlaces: 0,
-                    color: AppColors.themeColor,
-                    onChanged: (value) {},
-                  ),
-                ],
-              );
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Text(
+            productDetails.product?.title ?? '',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+        ItemCount(
+          initialValue: 1,
+          minValue: 1,
+          maxValue: 10,
+          decimalPlaces: 0,
+          color: AppColors.themeColor,
+          onChanged: (value) {},
+        ),
+      ],
+    );
   }
 
   Widget _buildRatingAndReviewSection(ProductDetailsModel productDetails) {
@@ -221,11 +216,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ],
           ),
           SizedBox(
-              width: 140,
-              child:
-                  ElevatedButton(onPressed: () {}, child: const Text('Add to Cart')))
+            width: 140,
+            child: ElevatedButton(
+              onPressed: _onTapAddToCart,
+              child: const Text('Add to Cart'),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  Future<void> _onTapAddToCart() async {
+    bool isLoggedInUser = await Get.find<AuthController>().isLoggedInUser();
+    if(isLoggedInUser){
+
+    }
+    else {
+      Get.to(() => const EmailVerificationScreen());
+    }
   }
 }

@@ -16,8 +16,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() =>
-            ProductListScreen(category: categoryModel));
+        Get.to(() => ProductListScreen(category: categoryModel));
       },
       child: Column(
         children: [
@@ -26,10 +25,10 @@ class CategoryCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.themeColor.withOpacity(0.1),
             ),
-            child: const Icon(
-              Icons.computer,
-              size: 48,
-              color: AppColors.themeColor,
+            child: Image.network(
+              categoryModel.categoryImg ?? '',
+              width: 48,
+              height: 48,
             ),
           ),
           const SizedBox(
