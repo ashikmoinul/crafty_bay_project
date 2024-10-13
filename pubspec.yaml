@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.1 <4.0.0'
+  sdk: '>=3.4.3 <4.0.0'
 
 
 dependencies:
@@ -21,7 +21,7 @@ dependencies:
   item_count_number_button: ^1.9.2
   http: ^1.2.2
   logger: ^2.4.0
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   flutter_test:

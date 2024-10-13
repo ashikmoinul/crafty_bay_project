@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crafty_bay_project/presentation/state_holders/auth_controller.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 import '../models/network_response.dart';
@@ -9,14 +10,14 @@ class NetworkCaller {
   NetworkCaller({required this.logger});
 
   Future<NetworkResponse> getRequest({
-    required String url,
+    required String url, String? token
   }) async {
     try {
       Uri uri = Uri.parse(url);
       _requestLog(url, {}, {}, '');
 
       final Response response = await get(uri, headers: {
-        'token': '',
+        'token': '${token ?? AuthController.accessToken}',
       });
       if (response.statusCode == 200) {
         _responseLog(
@@ -52,7 +53,7 @@ class NetworkCaller {
       _requestLog(url, {}, body ?? {}, '');
       final Response response = await post(uri,
           headers: {
-            'token': '',
+            'token': '${AuthController.accessToken}',
             'content-type': 'application/json',
           },
           body: jsonEncode(body));

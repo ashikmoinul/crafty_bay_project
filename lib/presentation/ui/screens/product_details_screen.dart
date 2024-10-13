@@ -1,11 +1,11 @@
 import 'package:crafty_bay_project/data/models/product_details_model.dart';
-import 'package:crafty_bay_project/data/models/product_model.dart';
+import 'package:crafty_bay_project/presentation/state_holders/add_to_cart_controller.dart';
 import 'package:crafty_bay_project/presentation/state_holders/auth_controller.dart';
 import 'package:crafty_bay_project/presentation/state_holders/product_details_controller.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/email_verification_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/utils/app_colors.dart';
+import 'package:crafty_bay_project/presentation/ui/utils/snack_message.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/centered_circular_progress_indicator.dart';
-import 'package:crafty_bay_project/presentation/ui/widgets/color_picker.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/product_image_slider.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/size_picker.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,10 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  String _selectedColor = '';
+  String _selectedSize = '';
+  int quantity = 1;
+
   @override
   void initState() {
     super.initState();
@@ -91,8 +95,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 SizePicker(
                   sizes: product.color!.split(
                       ','), //split for comma separated string because api shows in string by comma
-                  onSizeSelected: (String selectedSize) {},
+                  onSizeSelected: (String selectedColor) {
+                    _selectedColor = selectedColor;
+                  },
                 ),
+
+                const SizedBox(height: 16),
+
+                SizePicker(
+                  sizes: product.size!.split(
+                      ','), //split for comma separated string because api shows in string by comma
+                  onSizeSelected: (String selectedSize) {
+                    _selectedSize = selectedSize;
+                  },
+                ),
+
                 const SizedBox(height: 16),
                 _buildDescriptionSection(product),
               ],
@@ -136,7 +153,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           maxValue: 10,
           decimalPlaces: 0,
           color: AppColors.themeColor,
-          onChanged: (value) {},
+          onChanged: (value) {
+            quantity = value.toInt();
+          },
         ),
       ],
     );
@@ -217,10 +236,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           SizedBox(
             width: 140,
-            child: ElevatedButton(
-              onPressed: _onTapAddToCart,
-              child: const Text('Add to Cart'),
-            ),
+            child:
+                GetBuilder<AddToCartController>(builder: (addToCartController) {
+              return Visibility(
+                visible: !addToCartController.inProgress,
+                replacement: const CenteredCircularProgressIndicator(),
+                child: ElevatedButton(
+                  onPressed: _onTapAddToCart,
+                  child: const Text('Add to Cart'),
+                ),
+              );
+            }),
           ),
         ],
       ),
@@ -229,10 +255,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Future<void> _onTapAddToCart() async {
     bool isLoggedInUser = await Get.find<AuthController>().isLoggedInUser();
-    if(isLoggedInUser){
-
-    }
-    else {
+    if (isLoggedInUser) {
+      final result = await Get.find<AddToCartController>().addToCart(
+        widget.productId,
+        _selectedColor,
+        _selectedSize,
+        quantity,
+      );
+      if (result) {
+        if (mounted) {
+          showSnackBarMessage(context, 'Added to cart');
+        }
+      } else {
+        if (mounted) {
+          showSnackBarMessage(
+              context, Get.find<AddToCartController>().errorMessage!, true);
+        }
+      }
+    } else {
       Get.to(() => const EmailVerificationScreen());
     }
   }
