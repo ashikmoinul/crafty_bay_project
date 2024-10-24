@@ -1,5 +1,4 @@
 import 'package:crafty_bay_project/presentation/state_holders/auth_controller.dart';
-import 'package:crafty_bay_project/presentation/ui/screens/home_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay_project/presentation/ui/widgets/app_logo_widget.dart';
 import 'package:flutter/material.dart';

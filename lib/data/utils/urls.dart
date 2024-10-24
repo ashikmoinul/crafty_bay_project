@@ -6,6 +6,7 @@ class Urls {
   static const String categoryListUrl = '$_baseUrl/CategoryList';
   static const String readProfileUrl = '$_baseUrl/ReadProfile';
   static const String addToCartUrl = '$_baseUrl/CreateCartList';
+  static const String createInvoice = "$_baseUrl/InvoiceCreate";
 
   //Method for API
   static String productListByRemark(String remark) =>
@@ -23,4 +24,6 @@ class Urls {
 
   static String verifyOtp(String email, String otp) =>
       '$_baseUrl/VerifyLogin/$email/$otp';
+
+
 }
